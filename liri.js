@@ -16,16 +16,29 @@ var request = require('request')
 var fs = require("fs");
 var exec = require('child_process').exec;
 var Spotify = require('node-spotify-api');
+var Twitter = require('twitter');
 
 //hey i want to access the keys!)
+
 switch(actionType) {
     case "my-tweets":
     console.log("my-tweets");
-      
-        break;
+    var client = new Twitter({
+    consumer_key: keys.twitterKeys.consumer_key,
+    consumer_secret: keys.twitterKeys.consumer_secret,
+    access_token_key: keys.twitterKeys.consumer_token_key,
+    access_token_secret: keys.twitterKeys.consumer_token_secret,
+});
+var params = {screen_name: 'xaboomoomoo'};
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+    console.log(tweets);
+  }
+});
+      break;
     case "spotify-this-song":
-
     console.log("spotify-this-song");
+
     var spotify = new Spotify({id: "f3def5c7d1ad4b289d9c1022ffaad070", secret: "63aad47916024a6c91753ddf1e8a5b18"});
 
     spotify.search({ type: 'track', query: searchTerm }, function(err, data) {
@@ -81,12 +94,7 @@ switch(actionType) {
 			exec(cmd, function(error, stdout, stderr) {
 			console.log(stdout);
 				});
-
-
-
- 
   });
-        
         break;
     default:
 
